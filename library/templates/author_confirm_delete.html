@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Delete Author{% endblock %}
+
+{% block content %}
+
+<h1>Delete "{{ author.name }}"?</h1>
+
+<p>This cannot be undone.</p>
+
+<form method="post">
+    {% csrf_token %}
+
+    <button class="btn btn-danger" type="submit">
+        Yes, delete
+    </button>
+
+    <a class="btn btn-secondary"
+    href="{% url 'author_detail' author.pk %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

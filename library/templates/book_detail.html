@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}{{ book.title }}{% endblock %}
+{% block content %}
+    <h1>{{ book.title }}</h1>
+    <p>By <a href="{% url 'author_detail' book.author.pk %}">{{ book.author.name }}</a></p>
+    <p>ISBN: {{ book.isbn }}</p>
+    <p>Published: {{ book.published_date|default:"Unknown" }}</p>
+    <p>Copies: {{ book.copies_available }} / {{ book.copies_total }}</p>
+    <p>
+        Status:
+        {% if book.is_available %}
+            <span class="badge bg-success">Available</span>
+        {% else %}
+            <span class="badge bg-danger">Not Available</span>
+        {% endif %}
+    </p>
+
+    <form method="post" action="{% url 'book_borrow' book.pk %}" style="display:inline">
+        {% csrf_token %}
+        <button class="btn btn-warning" {% if not book.is_available %}disabled{% endif %}>Borrow</button>
+    </form>
+    <form method="post" action="{% url 'book_return' book.pk %}" style="display:inline">
+        {% csrf_token %}
+        <button class="btn btn-secondary">Return</button>
+    </form>
+
+    <a class="btn btn-primary" href="{% url 'book_update' book.pk %}">Edit</a>
+    <a class="btn btn-danger" href="{% url 'book_delete' book.pk %}">Delete</a>
+{% endblock %}
